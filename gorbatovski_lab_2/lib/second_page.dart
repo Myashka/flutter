@@ -4,7 +4,10 @@ import 'dart:async';
 import 'dart:convert';
 
 Future<CatHTTP> fetchCat(String url) async {
-  final response = await http.get(Uri.parse(url));
+  final response = await http.get(
+    Uri.parse(url),
+    headers: {"Accept": "application/json", "Access-Control_Allow_Origin": "*"},
+  );
 
   if (response.statusCode == 200) {
     return CatHTTP.fromJson(jsonDecode(response.body));
@@ -24,7 +27,7 @@ class CatHTTP {
 
   factory CatHTTP.fromJson(Map<String, dynamic> json) {
     return CatHTTP(
-      src: json['src'],
+      src: json['img']['src'],
     );
   }
 }
@@ -40,11 +43,26 @@ class SecondPage extends StatefulWidget {
 
 class _SecondPageState extends State<SecondPage> {
   late Future<CatHTTP> futureCat;
+  String? _url, _body;
+  int? _status;
 
   @override
   void initState() {
     futureCat = fetchCat(widget.url);
+    _sendGet(widget.url);
     super.initState();
+  }
+
+  void _sendGet(url) {
+    http.get(Uri.parse(url)).then((response) {
+      _status = response.statusCode;
+      _body = response.body;
+      print(_body);
+    }).catchError((error) {
+      _status = 0;
+      _body = error.toString();
+      print(_body);
+    });
   }
 
   @override
