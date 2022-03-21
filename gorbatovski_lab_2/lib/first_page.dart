@@ -56,9 +56,7 @@ class _MyHomePageFromState extends State<MyHomePage> {
                     controller: _controller,
                     decoration: InputDecoration(
                       labelText: 'URL',
-                      errorText: texterror
-                          ? 'Enter correct URL with "http://" at the start'
-                          : null,
+                      errorText: texterror ? 'Enter correct URL' : null,
                     ),
                   ),
                 ),
