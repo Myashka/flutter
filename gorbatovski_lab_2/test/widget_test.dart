@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:gorbatovski_lab_2/main.dart';
 import '../lib/app.dart';
 
 void main() {

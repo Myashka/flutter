@@ -1,7 +1,6 @@
-// ignore_for_file: unnecessary_string_interpolations
-
 import 'package:flutter/material.dart';
 import 'second_page.dart';
+import 'package:validators/validators.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -11,8 +10,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageFromState extends State<MyHomePage> {
-  static const String _url = "https://";
-
   final _controller = TextEditingController();
   bool texterror = false;
 
@@ -30,35 +27,54 @@ class _MyHomePageFromState extends State<MyHomePage> {
       ),
       body: Center(
         child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.black,
+            ),
+          ),
+          width: 500,
+          height: 450,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Text('Print some web site',
+              const Padding(
+                padding: EdgeInsets.only(bottom: 50.0),
+                child: Text('Turns statsus code of your link',
+                    style: TextStyle(fontSize: 24.0, color: Colors.black)),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Print some web site',
                     style: TextStyle(fontSize: 20.0, color: Colors.black)),
               ),
-              TextFormField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  labelText: 'URL',
-                  errorText: texterror
-                      ? 'Enter correct URL with "http://" at the start'
-                      : null,
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      labelText: 'URL',
+                      errorText: texterror
+                          ? 'Enter correct URL with "http://" at the start'
+                          : null,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 25.0),
               ElevatedButton(
                 onPressed: () {
-                  if (_controller.text.isEmpty) {
+                  if (_controller.text.isEmpty || !isURL(_controller.text)) {
                     setState(() {
                       texterror = true;
                     });
-                  } else if (Uri.parse(_controller.text).isAbsolute) {
+                  } else {
                     setState(() {
                       texterror = false;
                     });
-                    String url = '${_controller.text}';
+                    String url = _controller.text;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -66,17 +82,12 @@ class _MyHomePageFromState extends State<MyHomePage> {
                       ),
                     );
                     _controller.clear();
-                  } else {
-                    setState(() {
-                      texterror = true;
-                    });
                   }
                 },
                 child: const Text("Let's try!"),
               ),
             ],
           ),
-          width: 400,
         ),
       ),
     );
