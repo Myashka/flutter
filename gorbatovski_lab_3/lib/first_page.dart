@@ -1,23 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gorbatovski_lab_2/input_prodiver.dart';
+import 'package:provider/provider.dart';
 import 'second_page.dart';
 import 'package:validators/validators.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key}) : super(key: key);
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageFromState();
-}
-
-class _MyHomePageFromState extends State<MyHomePage> {
   final _controller = TextEditingController();
-  bool texterror = false;
-
-  @override
-  void initState() {
-    _controller.text = "";
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +30,11 @@ class _MyHomePageFromState extends State<MyHomePage> {
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(bottom: 50.0),
-                child: Text('Turns statsus code of your link',
-                    style: TextStyle(fontSize: 24.0, color: Colors.black)),
+                child: Text('Turns statsus code of your link', style: TextStyle(fontSize: 24.0, color: Colors.black)),
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text('Print some web site',
-                    style: TextStyle(fontSize: 20.0, color: Colors.black)),
+                child: Text('Print some web site', style: TextStyle(fontSize: 20.0, color: Colors.black)),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
@@ -54,10 +42,7 @@ class _MyHomePageFromState extends State<MyHomePage> {
                   width: 300,
                   child: TextFormField(
                     controller: _controller,
-                    decoration: InputDecoration(
-                      labelText: 'URL',
-                      errorText: texterror ? 'Enter correct URL' : null,
-                    ),
+                    decoration: const InputDecoration(labelText: 'URL'),
                   ),
                 ),
               ),
@@ -65,20 +50,11 @@ class _MyHomePageFromState extends State<MyHomePage> {
               ElevatedButton(
                 onPressed: () {
                   if (_controller.text.isEmpty || !isURL(_controller.text)) {
-                    setState(() {
-                      texterror = true;
-                    });
+                    print("error");
                   } else {
-                    setState(() {
-                      texterror = false;
-                    });
                     String url = _controller.text;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SecondPage(url: url),
-                      ),
-                    );
+                    context.read<InputProvider>().fetchStatusCode(url);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(url: url)));
                     _controller.clear();
                   }
                 },

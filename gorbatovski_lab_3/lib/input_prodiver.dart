@@ -14,21 +14,17 @@ class CatHttp {
 
 class InputProvider with ChangeNotifier {
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
 
-  String? _statusCode;
-
-  String? get statusCode => _statusCode;
+  CatHttp? _catHttp;
+  CatHttp? get catHttp => _catHttp;
 
   Future<void> fetchStatusCode(url) async {
     _isLoading = true;
-    CatHttp? catHttp;
+    notifyListeners();
     final response = await http.get(Uri.parse(url));
-    catHttp = CatHttp.fromResponse(response);
-    _statusCode = catHttp.statusCode.toString();
+    _catHttp = CatHttp.fromResponse(response);
     _isLoading = false;
-
     notifyListeners();
   }
 }
